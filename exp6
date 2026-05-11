@@ -1,0 +1,74 @@
+import random
+import math
+
+# Fitness function
+f = lambda x, y: math.sin(x) + math.sin(y)
+
+# Initialize population
+pop = [
+    (
+        random.uniform(-2 * math.pi, 2 * math.pi),
+        random.uniform(-2 * math.pi, 2 * math.pi)
+    )
+    for _ in range(100)
+]
+
+# Genetic Algorithm
+for g in range(20):
+
+    # Selection
+    fit = [f(x, y) for x, y in pop]
+
+    # Shift fitness values to positive numbers
+    min_fit = min(fit)
+    if min_fit < 0:
+        fit = [i - min_fit + 1 for i in fit]
+
+    total = sum(fit)
+    prob = [i / total for i in fit]
+
+    new = []
+
+    while len(new) < 100:
+
+        # Select parents
+        p1, p2 = random.choices(pop, weights=prob, k=2)
+
+        # Crossover
+        c1 = (p1[0], p2[1])
+        c2 = (p2[0], p1[1])
+
+        # Mutation
+        if random.random() < 0.01:
+            c1 = (
+                c1[0] + random.uniform(-0.1, 0.1),
+                c1[1]
+            )
+
+        if random.random() < 0.01:
+            c2 = (
+                c2[0],
+                c2[1] + random.uniform(-0.1, 0.1)
+            )
+
+        new.extend([c1, c2])
+
+    # Keep population size fixed
+    pop = new[:100]
+
+    # Best individual
+    best = max(pop, key=lambda i: f(*i))
+
+    print(
+        f"Generation {g + 1}: "
+        f"Best individual {best}, "
+        f"Fitness {f(*best):.4f}"
+    )
+
+# Final result
+best = max(pop, key=lambda i: f(*i))
+
+print(
+    f"\nBest solution found: {best}, "
+    f"Fitness: {f(*best):.4f}"
+)
