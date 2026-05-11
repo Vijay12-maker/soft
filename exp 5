@@ -1,0 +1,36 @@
+import random
+
+# Fitness function
+def fitness(x):
+    return -(x * x + 40)
+
+# Initial population
+pop = [random.uniform(-10, 10) for _ in range(20)]
+
+# Generations
+for g in range(20):
+    best = max(pop, key=fitness)
+
+    print(
+        "Generation",
+        g + 1,
+        ": Best individual -",
+        best,
+        ", Fitness -",
+        fitness(best)
+    )
+
+    # Select top 5
+    pop = sorted(pop, key=fitness, reverse=True)[:5]
+
+    # Create new population
+    while len(pop) < 20:
+        a, b = random.sample(pop, 2)
+        child = (a + b) / 2 + random.uniform(-1, 1)
+        pop.append(child)
+
+# Final result
+best = max(pop, key=fitness)
+
+print("\nBest solution found:", best)
+print("Fitness:", fitness(best))
