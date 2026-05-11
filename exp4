@@ -1,0 +1,50 @@
+import numpy as np import matplotlib.pyplot as plt
+
+# Generate data
+
+np.random.seed(42)
+
+data = np.random.rand(100, 2)
+
+# Initialize weights
+
+w = np.random.rand(10, 10,2)
+
+#Training
+
+for e in range(500):
+
+for x in data:
+
+b = np.unravel_index(np.argmin(np.linalg.norm(w-x, axis=2)), (10,10)) for i in range(10):
+
+for j in range(10):
+
+d = np.linalg.norm(np.array([i,j]) np.array(b)) w[i,j] += np.exp(-d**2/(2*(e+1))) 0.2* (x-w[i,j])
+
+c = np.zeros((10,10))
+
+for i in range(10):
+
+for j in range(10):
+
+c[i,j] = np.argmin(np.linalg.norm(data-w[i,j], axis=1))
+
+plt.figure(figsize=(8,8))
+
+plt.pcolormesh(c, cmap='viridis')
+
+plt.colorbar(label='Cluster')
+
+plt.scatter(data[:,0]*10, data[:,1]*10, color='red', label='Data points')
+
+plt.title("Self-Organizing Map Clustering")
+
+plt.legend()
+
+plt.xlim(0,10)
+
+plt.ylim(0,10)
+
+plt.show()
+
